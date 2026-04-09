@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creative Toolkit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream:      #F0EDE4;
+      --cream-dark: #E4E0D3;
+      --white:      #FAFAF7;
+      --ink:        #1A1915;
+      --ink-muted:  #7A7870;
+      --ink-faint:  #C2BFB5;
+      --green:      #2D6A2D;
+      --green-bg:   #D6EDD0;
+      --green-mid:  #6ABD5E;
+      --orange:     #D94F1E;
+      --orange-bg:  #FCEADA;
+      --blue:       #2150A8;
+      --blue-bg:    #D8E6FB;
+      --yellow-bg:  #FEF0C0;
+      --yellow:     #9A6E00;
+      --purple-bg:  #EAE3F8;
+      --purple:     #5030A8;
+      --border:     rgba(26,25,21,0.1);
+      --radius-sm:  8px;
+      --radius-md:  14px;
+      --radius-lg:  20px;
+      --radius-pill:100px;
+      --font-body:  'Nunito', sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --t: 200ms ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── ANIMATED BACKGROUND ── */
+    body {
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: -60px;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, #E8E4DC 0%, transparent 55%),
+        radial-gradient(ellipse 70% 70% at 80% 90%, #D8D5CD 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 60% 40%, #EDEAE2 0%, transparent 50%),
+        radial-gradient(ellipse 90% 60% at 10% 80%, #E0DDD5 0%, transparent 50%),
+        #ECEAE2;
+      background-size: 200% 200%;
+      animation: bgDrift 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgDrift {
+      0%   { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, center; }
+      25%  { background-position: 30% 20%, 70% 80%, 80% 20%, 20% 70%, center; }
+      50%  { background-position: 60% 40%, 40% 60%, 20% 80%, 80% 20%, center; }
+      75%  { background-position: 20% 80%, 80% 20%, 60% 40%, 40% 60%, center; }
+      100% { background-position: 100% 100%, 0% 0%, 30% 70%, 70% 30%, center; }
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: var(--green-bg); }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--ink-faint); border-radius: 10px; }
+
+    .wrapper { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
+
+    /* ── HEADER ── */
+    header { padding: 52px 0 36px; }
+    .header-row {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(38px, 6vw, 68px);
+      font-weight: 400; font-style: italic;
+      line-height: 1; color: var(--ink); letter-spacing: -0.01em;
+    }
+    h1 em { font-style: normal; color: var(--orange); }
+    .header-sub { font-size: 14px; color: var(--ink-muted); margin-top: 10px; font-weight: 500; }
+    .tool-counter {
+      background: rgba(250,250,247,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 14px 20px; text-align: right; flex-shrink: 0;
+    }
+    .tool-counter .num {
+      font-family: var(--font-serif); font-size: 36px; font-style: italic;
+      color: var(--orange); line-height: 1; display: block;
+    }
+    .tool-counter .label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--ink-muted);
+    }
+
+    /* ── CONTROLS ── */
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      padding: 20px 0 32px;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 300px; }
+    .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-muted); }
+    .search-wrap input {
+      width: 100%;
+      background: rgba(250,250,247,0.8);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill); padding: 9px 16px 9px 36px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 600;
+      color: var(--ink); outline: none; transition: border-color var(--t), box-shadow var(--t);
+    }
+    .search-wrap input:focus { border-color: var(--green-mid); box-shadow: 0 0 0 3px rgba(106,189,94,0.15); }
+    .search-wrap input::placeholder { color: var(--ink-faint); font-weight: 500; }
+    .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-btn {
+      font-family: var(--font-body); font-size: 12px; font-weight: 700;
+      padding: 7px 14px; border-radius: var(--radius-pill);
+      border: 1.5px solid var(--border);
+      background: rgba(250,250,247,0.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: var(--ink-muted); cursor: pointer; transition: all var(--t);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .filter-btn .dot { width: 7px; height: 7px; border-radius: 50%; opacity: 0.5; }
+    .filter-btn:hover { border-color: var(--ink-muted); color: var(--ink); }
+    .filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--white); }
+    .filter-btn.active .dot { opacity: 1; }
+
+    [data-filter="inspiration"] .dot { background: var(--orange); }
+    [data-filter="color"] .dot       { background: #D04FC2; }
+    [data-filter="typo"] .dot        { background: var(--blue); }
+    [data-filter="ui-ux"] .dot       { background: var(--green); }
+    [data-filter="3d-motion"] .dot   { background: #8050D0; }
+    [data-filter="ia"] .dot          { background: #D09020; }
+    [data-filter="organisation"] .dot{ background: #208090; }
+    [data-filter="ressources"] .dot  { background: #C04040; }
+
+    /* ── CATEGORY SECTIONS ── */
+    .category-section { margin-bottom: 48px; }
+    .category-section[data-hidden="true"] { display: none; }
+    .cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .cat-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 14px 5px 10px; border-radius: var(--radius-pill);
+      font-size: 12px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.07em; border: 1.5px solid; flex-shrink: 0;
+    }
+    .cat-pill .cat-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .cat-inspiration { background: var(--orange-bg); color: var(--orange); border-color: rgba(217,79,30,0.2); }
+    .cat-inspiration .cat-dot { background: var(--orange); }
+    .cat-color { background: #F9DAFB; color: #A020B8; border-color: rgba(160,32,184,0.15); }
+    .cat-color .cat-dot { background: #D04FC2; }
+    .cat-typo { background: var(--blue-bg); color: var(--blue); border-color: rgba(33,80,168,0.15); }
+    .cat-typo .cat-dot { background: var(--blue); }
+    .cat-ui { background: var(--green-bg); color: var(--green); border-color: rgba(45,106,45,0.15); }
+    .cat-ui .cat-dot { background: var(--green); }
+    .cat-motion { background: var(--purple-bg); color: var(--purple); border-color: rgba(80,48,168,0.15); }
+    .cat-motion .cat-dot { background: #8050D0; }
+    .cat-ia { background: var(--yellow-bg); color: var(--yellow); border-color: rgba(154,110,0,0.15); }
+    .cat-ia .cat-dot { background: #D09020; }
+    .cat-orga { background: #D6F0F2; color: #166070; border-color: rgba(22,96,112,0.15); }
+    .cat-orga .cat-dot { background: #208090; }
+    .cat-res { background: #FDDEDE; color: #963030; border-color: rgba(150,48,48,0.15); }
+    .cat-res .cat-dot { background: #C04040; }
+    .cat-count { font-size: 12px; font-weight: 600; color: var(--ink-faint); margin-left: auto; }
+    .cat-line { flex: 1; height: 1.5px; background: var(--border); border-radius: 2px; }
+
+    /* ── GRID ── */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 10px;
+    }
+
+    /* ── CARD ──
+       To add a tool: copy an <a class="tool-card"> block, update
+       href, data-category, data-tags, name, desc, tags, favicon domain.
+       Favicon pattern: https://www.google.com/s2/favicons?sz=64&domain=DOMAIN.com
+    ── */
+    .tool-card {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: rgba(250,250,247,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 16px 18px;
+      cursor: pointer; transition: transform var(--t), border-color var(--t), box-shadow var(--t), background var(--t);
+      animation: popIn 0.35s ease both;
+    }
+    .tool-card:hover {
+      transform: translateY(-3px) scale(1.005);
+      border-color: rgba(26,25,21,0.22);
+      background: rgba(250,250,247,0.92);
+      box-shadow: 0 6px 24px rgba(26,25,21,0.08);
+    }
+    .tool-card[data-hidden="true"] { display: none; }
+    .card-icon {
+      width: 38px; height: 38px; border-radius: var(--radius-sm);
+      background: rgba(240,237,228,0.8); border: 1px solid var(--border);
+      flex-shrink: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-icon img { width: 22px; height: 22px; object-fit: contain; }
+    .card-body { flex: 1; min-width: 0; }
+    .card-name-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-bottom: 4px;
+    }
+    .card-name { font-size: 14px; font-weight: 800; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-arrow { color: var(--ink-faint); font-size: 13px; flex-shrink: 0; transition: color var(--t), transform var(--t); }
+    .tool-card:hover .card-arrow { color: var(--orange); transform: translate(2px, -2px); }
+    .card-desc { font-size: 12px; font-weight: 500; color: var(--ink-muted); line-height: 1.5; margin-bottom: 10px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .card-tag {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.07em; padding: 2px 8px; border-radius: var(--radius-pill);
+      background: rgba(240,237,228,0.8); color: var(--ink-muted); border: 1px solid var(--border);
+    }
+    /* badge "underrated" */
+    .card-tag.gem {
+      background: var(--yellow-bg); color: var(--yellow);
+      border-color: rgba(154,110,0,0.2);
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { display: none; text-align: center; padding: 80px 0; }
+    .empty-state.visible { display: block; }
+    .empty-blob { font-family: var(--font-serif); font-style: italic; font-size: 22px; color: var(--ink-muted); margin-bottom: 6px; }
+    .empty-sub { font-size: 13px; color: var(--ink-faint); font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border); padding: 24px 0 40px; margin-top: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px; font-size: 12px; font-weight: 600; color: var(--ink-faint);
+    }
+    footer a { color: var(--ink-muted); transition: color var(--t); }
+    footer a:hover { color: var(--ink); }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-row">
+      <div>
+        <h1>Creative <em>Toolkit</em></h1>
+        <p class="header-sub">Tous mes outils favoris, en un seul endroit.</p>
+      </div>
+      <div class="tool-counter">
+        <span class="num" id="tool-total">—</span>
+        <span class="label">outils</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input type="text" id="search-input" placeholder="Rechercher…" autocomplete="off" />
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Tous</button>
+      <button class="filter-btn" data-filter="inspiration"><span class="dot"></span>Inspiration</button>
+      <button class="filter-btn" data-filter="color"><span class="dot"></span>Couleur</button>
+      <button class="filter-btn" data-filter="typo"><span class="dot"></span>Typo</button>
+      <button class="filter-btn" data-filter="ui-ux"><span class="dot"></span>UI · Web</button>
+      <button class="filter-btn" data-filter="3d-motion"><span class="dot"></span>3D · Motion</button>
+      <button class="filter-btn" data-filter="ia"><span class="dot"></span>IA</button>
+      <button class="filter-btn" data-filter="organisation"><span class="dot"></span>Organisation</button>
+      <button class="filter-btn" data-filter="ressources"><span class="dot"></span>Ressources</button>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       INSPIRATION
+  ==================================================== -->
+  <section class="category-section" data-category="inspiration">
+    <div class="cat-header">
+      <div class="cat-pill cat-inspiration"><span class="cat-dot"></span>Inspiration</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="inspiration"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://www.behance.net" target="_blank" rel="noopener" data-category="inspiration" data-tags="portfolio design graphisme inspiration">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=behance.net" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Behance</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Référence mondiale pour explorer des portfolios de designers et studios créatifs.</p>
+          <div class="card-tags"><span class="card-tag">Portfolio</span><span class="card-tag">Graphisme</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://dribbble.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="ui design shots inspiration tendances">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=dribbble.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Dribbble</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Shots UI, branding et motion. Idéal pour capter les tendances visuelles actuelles.</p>
+          <div class="card-tags"><span class="card-tag">UI</span><span class="card-tag">Branding</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://fr.pinterest.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="moodboard références visuels inspiration">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=pinterest.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Pinterest</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Le moteur de recherche visuel pour construire des moodboards et collecter des références.</p>
+          <div class="card-tags"><span class="card-tag">Moodboard</span><span class="card-tag">Références</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.cosmos.so" target="_blank" rel="noopener" data-category="inspiration" data-tags="moodboard collection visuelle curated inspiration">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=cosmos.so" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Cosmos</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Collection visuelle pensée pour les créatifs. Alternative premium à Pinterest.</p>
+          <div class="card-tags"><span class="card-tag">Curated</span><span class="card-tag">Collection</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.designspiration.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="inspiration design couleur recherche visuelle curated">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=designspiration.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Designspiration</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Recherche par couleur ou mot-clé. Curated, sans le bruit de Behance.</p>
+          <div class="card-tags"><span class="card-tag">Recherche</span><span class="card-tag">Curated</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://abduzeedo.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="blog design motion typographie veille inspiration">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=abduzeedo.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Abduzeedo</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Blog de référence sur le design, la motion et la typographie. Veille créative de qualité.</p>
+          <div class="card-tags"><span class="card-tag">Blog</span><span class="card-tag">Motion</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.fubiz.net/category/graphic/" target="_blank" rel="noopener" data-category="inspiration" data-tags="graphisme art direction tendances visuelles veille">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=fubiz.net" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Fubiz Graphic</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Veille créative de haute qualité sur le graphisme et l'art direction.</p>
+          <div class="card-tags"><span class="card-tag">Veille</span><span class="card-tag">Art Direction</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://thedieline.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="packaging branding emballage">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=thedieline.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">The Dieline</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Référence mondiale du packaging design. Incontournable pour les projets d'emballage.</p>
+          <div class="card-tags"><span class="card-tag">Packaging</span><span class="card-tag">Branding</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.laffichiste.com/fr" target="_blank" rel="noopener" data-category="inspiration" data-tags="affiches poster archive graphisme français">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=laffichiste.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">L'Affichiste</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Archive d'affiches de design graphique. Source rare pour le poster design.</p>
+          <div class="card-tags"><span class="card-tag">Affiches</span><span class="card-tag">Archive</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://commercecream.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="ecommerce web design boutiques inspiration">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=commercecream.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Commerce Cream</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Galerie d'e-commerces au design exceptionnel. Les meilleures boutiques en ligne.</p>
+          <div class="card-tags"><span class="card-tag">E-commerce</span><span class="card-tag">Web</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://screensdesign.com/store-screenshots" target="_blank" rel="noopener" data-category="inspiration" data-tags="app store screenshots mobile ui apple">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=screensdesign.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Screens Design</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Screenshots App Store de haute qualité. Référence pour les présentations d'apps mobiles.</p>
+          <div class="card-tags"><span class="card-tag">App Store</span><span class="card-tag">Mobile UI</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.siteinspire.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="web design sites vitrine inspiration ui">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=siteinspire.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Siteinspire</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Galerie aux standards les plus élevés. Un des filtres les plus exigeants pour le web.</p>
+          <div class="card-tags"><span class="card-tag">Web Design</span><span class="card-tag">Vitrine</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://land-book.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="landing page web design ui inspiration">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=land-book.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Land-book</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Galerie de landing pages qualité, filtrables par style et industrie.</p>
+          <div class="card-tags"><span class="card-tag">Landing Page</span><span class="card-tag">Web</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://www.instagram.com/mindsparklemag/" target="_blank" rel="noopener" data-category="inspiration" data-tags="graphisme editorial print magazine curated typographie">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=mindsparklemag.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Mindspark Mag</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Curation ultra-sélective de graphisme éditorial et print. Meilleure source pour l'inspiration typographique radicale.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Editorial</span><span class="card-tag">Print</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.typewolf.com" target="_blank" rel="noopener" data-category="inspiration" data-tags="typographie sites web police tendances inspiration">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=typewolf.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Typewolf</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Sites web inspirants classés par typographie utilisée. La référence pour trouver des fonts in-the-wild.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Typo</span><span class="card-tag">Web</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.lapa.ninja" target="_blank" rel="noopener" data-category="inspiration" data-tags="landing page startup web design inspiration best">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=lapa.ninja" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Lapa Ninja</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Les meilleures landing pages de startups, actualisées en continu. Interface plus rapide que Land-book.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Landing Page</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       COULEUR
+  ==================================================== -->
+  <section class="category-section" data-category="color">
+    <div class="cat-header">
+      <div class="cat-pill cat-color"><span class="cat-dot"></span>Couleur</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="color"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://coolors.co" target="_blank" rel="noopener" data-category="color" data-tags="palette couleur générateur contraste hex">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=coolors.co" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Coolors</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Générateur de palettes ultra-rapide. Barre espace pour générer, F pour figer.</p>
+          <div class="card-tags"><span class="card-tag">Palette</span><span class="card-tag">Générateur</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://mycolor.space" target="_blank" rel="noopener" data-category="color" data-tags="palette couleur harmonie gradient identité">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=mycolor.space" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">MyColor.space</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Génère des palettes cohérentes depuis une couleur de base. Utile pour les identités.</p>
+          <div class="card-tags"><span class="card-tag">Harmonie</span><span class="card-tag">Palette</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://hexcolorpedia.com" target="_blank" rel="noopener" data-category="color" data-tags="couleur hex référence encyclopédie nuance">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=hexcolorpedia.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">HexColorpedia</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Encyclopédie des couleurs hex. Explore nuances, teintes adjacentes et codes.</p>
+          <div class="card-tags"><span class="card-tag">Référence</span><span class="card-tag">Hex</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.happyhues.co" target="_blank" rel="noopener" data-category="color" data-tags="palette ui design applicatif contexte rendu">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=happyhues.co" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Happy Hues</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Palettes appliquées à une interface. Idéal pour visualiser le rendu en contexte UI.</p>
+          <div class="card-tags"><span class="card-tag">UI Context</span><span class="card-tag">Palette</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://gradients.app" target="_blank" rel="noopener" data-category="color" data-tags="gradient dégradé css couleur premium">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=gradients.app" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Gradients.app</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Collection et générateur de dégradés premium avec export CSS direct.</p>
+          <div class="card-tags"><span class="card-tag">Gradient</span><span class="card-tag">CSS</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://www.colorhunt.co" target="_blank" rel="noopener" data-category="color" data-tags="palette couleur tendances curated vote populaire">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=colorhunt.co" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Color Hunt</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Palettes soumises et votées par la communauté. Idéal pour trouver des combos tendance rapidement.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Community</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.khroma.co" target="_blank" rel="noopener" data-category="color" data-tags="couleur ia machine learning palette personnalisée">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=khroma.co" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Khroma</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">IA qui apprend tes préférences colorimétriques pour générer des palettes ultra-personnalisées.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">IA</span><span class="card-tag">Palette</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       TYPOGRAPHIE
+  ==================================================== -->
+  <section class="category-section" data-category="typo">
+    <div class="cat-header">
+      <div class="cat-pill cat-typo"><span class="cat-dot"></span>Typographie</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="typo"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://www.fontbrief.com/fontbrief" target="_blank" rel="noopener" data-category="typo" data-tags="police typo découverte recommandation style">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=fontbrief.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">FontBrief</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Trouve la police parfaite en répondant à quelques questions sur ton projet.</p>
+          <div class="card-tags"><span class="card-tag">Découverte</span><span class="card-tag">Recommandation</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://fontsinuse.com" target="_blank" rel="noopener" data-category="typo" data-tags="typo usage réel archive logo affiche imprimé">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=fontsinuse.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Fonts In Use</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Archive de typographies en usage réel — logos, affiches, packaging.</p>
+          <div class="card-tags"><span class="card-tag">Archive</span><span class="card-tag">Usage Réel</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://typescale.com" target="_blank" rel="noopener" data-category="typo" data-tags="échelle typographique hiérarchie taille modular scale">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=typescale.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Typescale</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Générateur d'échelles typographiques modulaires. Hiérarchie cohérente pour les identités.</p>
+          <div class="card-tags"><span class="card-tag">Scale</span><span class="card-tag">Hiérarchie</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.typ.io" target="_blank" rel="noopener" data-category="typo" data-tags="pairing combinaisons typographie duo police association">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=typ.io" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Typ.io</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Combinaisons de polices inspirées de vrais sites web. Pairings en contexte réel.</p>
+          <div class="card-tags"><span class="card-tag">Pairing</span><span class="card-tag">Combinaisons</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://www.fontshare.com" target="_blank" rel="noopener" data-category="typo" data-tags="polices gratuites qualité pro télécharger libre droits">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=fontshare.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Fontshare</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Bibliothèque de polices pro entièrement gratuites par Indian Type Foundry. Qualité bien au-dessus de Google Fonts.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Gratuit</span><span class="card-tag">Pro</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.variable.fonts" target="_blank" rel="noopener" data-category="typo" data-tags="variable font police interactive css web axes">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=variable.fonts" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Variable Fonts</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Explore et teste les polices variables interactivement. Indispensable pour les projets web animés.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Variable</span><span class="card-tag">Web</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       UI · WEB
+  ==================================================== -->
+  <section class="category-section" data-category="ui-ux">
+    <div class="cat-header">
+      <div class="cat-pill cat-ui"><span class="cat-dot"></span>UI · Web</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="ui-ux"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://www.awwwards.com" target="_blank" rel="noopener" data-category="ui-ux" data-tags="web design awwwards ux interface sites awards">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=awwwards.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Awwwards</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Le standard mondial pour les sites les plus innovants. Référence absolue pour le web design haut de gamme.</p>
+          <div class="card-tags"><span class="card-tag">Web Design</span><span class="card-tag">Awards</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://21st.dev/community/components/s/border" target="_blank" rel="noopener" data-category="ui-ux" data-tags="composants ui react frontend code components">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=21st.dev" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">21st.dev</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Bibliothèque de composants UI premium pour React. Des éléments soignés prêts à l'emploi.</p>
+          <div class="card-tags"><span class="card-tag">Composants</span><span class="card-tag">React</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://uiverse.io" target="_blank" rel="noopener" data-category="ui-ux" data-tags="composants css ui animations boutons inputs code">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=uiverse.io" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">UIverse</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Composants CSS/HTML open source — boutons, loaders, cards. Utile pour les micro-animations.</p>
+          <div class="card-tags"><span class="card-tag">CSS</span><span class="card-tag">Composants</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://animista.net" target="_blank" rel="noopener" data-category="ui-ux" data-tags="animation css generateur code keyframes web">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=animista.net" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Animista</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Générateur d'animations CSS avec prévisualisation en temps réel. Exporte du code propre.</p>
+          <div class="card-tags"><span class="card-tag">Animation</span><span class="card-tag">CSS</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://haikei.app" target="_blank" rel="noopener" data-category="ui-ux" data-tags="svg background vagues formes générer web">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=haikei.app" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Haikei</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Générateur de backgrounds SVG — vagues, blobs, grilles. Exports propres pour le web ou Figma.</p>
+          <div class="card-tags"><span class="card-tag">SVG</span><span class="card-tag">Backgrounds</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://www.rive.app" target="_blank" rel="noopener" data-category="ui-ux" data-tags="animation interactive ui web mobile lottie temps réel">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=rive.app" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Rive</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Animations interactives en temps réel pour le web et le mobile. Supérieur à Lottie pour les micro-interactions complexes.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Animation</span><span class="card-tag">Interactive</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.framer.com" target="_blank" rel="noopener" data-category="ui-ux" data-tags="web design prototype animation no-code site vitrine">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=framer.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Framer</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Crée des sites web animés no-code avec une qualité proche du code custom. Idéal pour les portfolios studios.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">No-code</span><span class="card-tag">Vitrine</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       3D · MOTION
+  ==================================================== -->
+  <section class="category-section" data-category="3d-motion">
+    <div class="cat-header">
+      <div class="cat-pill cat-motion"><span class="cat-dot"></span>3D · Motion</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="3d-motion"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://www.motionographer.com" target="_blank" rel="noopener" data-category="3d-motion" data-tags="motion design animation 3d veille inspiration studio">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=motionographer.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Motionographer</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">La référence du motion design. Studios, réalisations, interviews — veille essentielle.</p>
+          <div class="card-tags"><span class="card-tag">Motion</span><span class="card-tag">Veille</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.artstation.com" target="_blank" rel="noopener" data-category="3d-motion" data-tags="3d cgi blender portfolio artistes rendu">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=artstation.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">ArtStation</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Portfolios des meilleurs artistes 3D, CGI et VFX du monde. Référence pour les rendus.</p>
+          <div class="card-tags"><span class="card-tag">3D</span><span class="card-tag">CGI</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://polyhaven.com" target="_blank" rel="noopener" data-category="3d-motion" data-tags="hdri textures 3d blender assets gratuits pbr">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=polyhaven.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Poly Haven</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">HDRIs, textures PBR et modèles 3D 100% gratuits. Qualité pro pour Blender.</p>
+          <div class="card-tags"><span class="card-tag">HDRI</span><span class="card-tag">Textures</span><span class="card-tag">Blender</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://ambientcg.com" target="_blank" rel="noopener" data-category="3d-motion" data-tags="textures matériaux pbr blender 3d seamless">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=ambientcg.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">AmbientCG</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Textures PBR seamless en très haute résolution. Parfait pour les renders produit.</p>
+          <div class="card-tags"><span class="card-tag">Textures PBR</span><span class="card-tag">Blender</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://www.productioncrate.com" target="_blank" rel="noopener" data-category="3d-motion" data-tags="vfx effets visuels footage overlay stock motion">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=productioncrate.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">ProductionCrate</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Assets VFX, overlays, sons et footages gratuits pour le motion design. Une mine souvent ignorée.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">VFX</span><span class="card-tag">Assets</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.pexels.com/videos/" target="_blank" rel="noopener" data-category="3d-motion" data-tags="footage vidéo stock gratuit libre droits b-roll">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=pexels.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Pexels Video</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Footage vidéo haute qualité entièrement gratuit. Utile pour les b-rolls et les compositions motion.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Footage</span><span class="card-tag">Gratuit</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.aescripts.com" target="_blank" rel="noopener" data-category="3d-motion" data-tags="after effects plugins scripts motion design extensions">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=aescripts.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">aescripts</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">La marketplace de référence pour les plugins After Effects et Motion. Scripts qui changent réellement le workflow.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Plugins AE</span><span class="card-tag">Scripts</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       IA · GÉNÉRATIF
+  ==================================================== -->
+  <section class="category-section" data-category="ia">
+    <div class="cat-header">
+      <div class="cat-pill cat-ia"><span class="cat-dot"></span>IA · Génératif</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="ia"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://www.midjourney.com" target="_blank" rel="noopener" data-category="ia" data-tags="ia image génératif midjourney prompt visuel">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=midjourney.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Midjourney</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Le standard IA pour les créatifs. Moodboards et explorations visuelles rapides.</p>
+          <div class="card-tags"><span class="card-tag">Génératif</span><span class="card-tag">Image</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://runwayml.com" target="_blank" rel="noopener" data-category="ia" data-tags="ia vidéo motion génératif animation">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=runwayml.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Runway</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">IA générative pour la vidéo et le motion. Text-to-video, rotoscopie IA.</p>
+          <div class="card-tags"><span class="card-tag">Vidéo IA</span><span class="card-tag">Motion</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://krea.ai" target="_blank" rel="noopener" data-category="ia" data-tags="ia image génération temps réel upscaling">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=krea.ai" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Krea AI</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Génération d'images en temps réel. Upscaling IA de haute qualité pour renders et photos produit.</p>
+          <div class="card-tags"><span class="card-tag">Temps Réel</span><span class="card-tag">Upscaling</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://ideogram.ai" target="_blank" rel="noopener" data-category="ia" data-tags="ia image texte typographie intégré génératif logo">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=ideogram.ai" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Ideogram</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Le seul générateur IA qui intègre du texte lisible dans les images. Parfait pour les concepts de logos et affiches.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Texte IA</span><span class="card-tag">Logo</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.topazlabs.com" target="_blank" rel="noopener" data-category="ia" data-tags="ia upscaling amélioration photo vidéo résolution netteté">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=topazlabs.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Topaz Labs</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Upscaling et netteté IA pour photos et vidéos. Indispensable pour upres des renders ou images de référence.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Upscaling</span><span class="card-tag">Vidéo</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://luma.ai" target="_blank" rel="noopener" data-category="ia" data-tags="ia 3d nerf capture objet réel modèle génératif">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=luma.ai" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Luma AI</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Transforme une vidéo en modèle 3D via NeRF. Capture un objet réel en quelques minutes pour l'intégrer dans Blender.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">3D IA</span><span class="card-tag">NeRF</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       ORGANISATION
+  ==================================================== -->
+  <section class="category-section" data-category="organisation">
+    <div class="cat-header">
+      <div class="cat-pill cat-orga"><span class="cat-dot"></span>Organisation</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="organisation"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://milanote.com" target="_blank" rel="noopener" data-category="organisation" data-tags="moodboard organisation notes visuels board créatif brief">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=milanote.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Milanote</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Board visuel pour organiser tes idées, moodboards et briefs. L'outil de pensée visuelle pour les designers.</p>
+          <div class="card-tags"><span class="card-tag">Moodboard</span><span class="card-tag">Organisation</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.notion.so" target="_blank" rel="noopener" data-category="organisation" data-tags="notes projet gestion organisation wiki base données">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=notion.so" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Notion</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Wiki, suivi de projets, briefs, CRM. L'OS du studio créatif.</p>
+          <div class="card-tags"><span class="card-tag">Wiki</span><span class="card-tag">Projets</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://heptabase.com" target="_blank" rel="noopener" data-category="organisation" data-tags="notes spatiales cartes idées concepts recherche miro notion">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=heptabase.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Heptabase</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Notes visuelles et spatiales pour le développement de concepts. Mi-Miro mi-Notion, parfait pour les phases de réflexion créative.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Notes</span><span class="card-tag">Concepts</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       RESSOURCES
+  ==================================================== -->
+  <section class="category-section" data-category="ressources">
+    <div class="cat-header">
+      <div class="cat-pill cat-res"><span class="cat-dot"></span>Ressources</div>
+      <div class="cat-line"></div>
+      <span class="cat-count" data-cat-count="ressources"></span>
+    </div>
+    <div class="tools-grid">
+
+      <a class="tool-card" href="https://unsplash.com" target="_blank" rel="noopener" data-category="ressources" data-tags="photos stock gratuit haute résolution libre droits">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=unsplash.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Unsplash</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Photothèque gratuite et libre de droits en haute résolution. Utile pour les maquettes client.</p>
+          <div class="card-tags"><span class="card-tag">Photos</span><span class="card-tag">Stock</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.svgrepo.com" target="_blank" rel="noopener" data-category="ressources" data-tags="svg icones vecteurs gratuits bibliothèque">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=svgrepo.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">SVG Repo</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">500 000+ SVG et icônes téléchargeables gratuitement. Recherche avancée par style.</p>
+          <div class="card-tags"><span class="card-tag">SVG</span><span class="card-tag">Icônes</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.brandfetch.com" target="_blank" rel="noopener" data-category="ressources" data-tags="logos marques branding assets télécharger svg">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=brandfetch.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Brandfetch</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Télécharge les logos, couleurs et assets de n'importe quelle marque. Indispensable pour les pitchs.</p>
+          <div class="card-tags"><span class="card-tag">Logos</span><span class="card-tag">Brand Assets</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://shots.so" target="_blank" rel="noopener" data-category="ressources" data-tags="mockup device présentation screenshot rendu apple">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=shots.so" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Shots.so</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Mockups device premium pour présenter tes créations. Rendu ultra soigné en quelques secondes.</p>
+          <div class="card-tags"><span class="card-tag">Mockup</span><span class="card-tag">Présentation</span></div>
+        </div>
+      </a>
+
+      <!-- ★ UNDERRATED -->
+      <a class="tool-card" href="https://www.noise.kitchen" target="_blank" rel="noopener" data-category="ressources" data-tags="texture grain noise svg overlay css bruit film">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=noise.kitchen" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Noise Kitchen</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Génère des textures grain/noise configurables en SVG ou CSS. Donne une dimension organique immédiate aux designs.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Texture</span><span class="card-tag">Grain</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.shapefest.com" target="_blank" rel="noopener" data-category="ressources" data-tags="3d formes objets png transparent rendu composition">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=shapefest.com" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Shapefest</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Bibliothèque de formes 3D PNG fond transparent prêtes à l'emploi. Parfait pour des compositions rapides et des visuels sociaux.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">3D Assets</span><span class="card-tag">PNG</span></div>
+        </div>
+      </a>
+
+      <a class="tool-card" href="https://www.magicpattern.design/tools/css-backgrounds" target="_blank" rel="noopener" data-category="ressources" data-tags="pattern motif css svg fond background générer code">
+        <div class="card-icon"><img src="https://www.google.com/s2/favicons?sz=64&domain=magicpattern.design" alt="" /></div>
+        <div class="card-body">
+          <div class="card-name-row"><span class="card-name">Magic Pattern</span><span class="card-arrow">↗</span></div>
+          <p class="card-desc">Génère des fonds et patterns CSS/SVG configurables visuellement. Export code propre direct, zéro friction.</p>
+          <div class="card-tags"><span class="card-tag gem">◆ Pépite</span><span class="card-tag">Patterns</span><span class="card-tag">CSS</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <div class="empty-state" id="empty-state">
+    <p class="empty-blob">Aucun résultat pour ça…</p>
+    <p class="empty-sub">Essaie un autre mot-clé ou filtre.</p>
+  </div>
+
+  <footer>
+    <span>Creative Toolkit</span>
+    <span>Hébergé sur <a href="https://pages.github.com" target="_blank">GitHub Pages</a></span>
+  </footer>
+
+</div>
+
+<script>
+  const allCards = document.querySelectorAll('.tool-card');
+  const sections  = document.querySelectorAll('.category-section');
+
+  document.getElementById('tool-total').textContent = allCards.length;
+
+  document.querySelectorAll('[data-cat-count]').forEach(el => {
+    const cat   = el.dataset.catCount;
+    const count = document.querySelectorAll(`.tool-card[data-category="${cat}"]`).length;
+    el.textContent = count + ' outil' + (count > 1 ? 's' : '');
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      sections.forEach(s => s.dataset.hidden = (f !== 'all' && s.dataset.category !== f).toString());
+      applySearch(document.getElementById('search-input').value);
+    });
+  });
+
+  function applySearch(q) {
+    q = q.toLowerCase().trim();
+    let visible = 0;
+    allCards.forEach(card => {
+      const parentHidden = card.closest('.category-section').dataset.hidden === 'true';
+      const matches = !q
+        || card.querySelector('.card-name').textContent.toLowerCase().includes(q)
+        || card.querySelector('.card-desc').textContent.toLowerCase().includes(q)
+        || (card.dataset.tags || '').includes(q);
+      card.dataset.hidden = (parentHidden || !matches).toString();
+      if (!parentHidden && matches) visible++;
+    });
+    sections.forEach(s => {
+      if (s.dataset.hidden === 'true') return;
+      s.style.display = s.querySelectorAll('.tool-card:not([data-hidden="true"])').length === 0 ? 'none' : '';
+    });
+    document.getElementById('empty-state').classList.toggle('visible', visible === 0);
+  }
+
+  document.getElementById('search-input').addEventListener('input', e => applySearch(e.target.value));
+</script>
+</body>
+</html>
